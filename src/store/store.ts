@@ -20,12 +20,10 @@ export const useStore = create(
           produce(state => {
             let found = false;
             for (let i = 0; i < state.CartList.length; i++) {
-              // Kiểm tra sản phẩm có tồn tại
               if (state.CartList[i].id === cartItem.id) {
                 found = true;
                 let size = false;
                 for (let j = 0; j < state.CartList[i].prices.length; j++) {
-                  // Kiểm tra nếu giống size thì tăng số lượng item
                   if (
                     state.CartList[i].prices[j].size === cartItem.prices[0].size
                   ) {
@@ -33,27 +31,24 @@ export const useStore = create(
                     state.CartList[i].prices[j].quantity++;
                     break;
                   }
-                  // Kiểm tra nếu không giống size thì push item đó vào mảng CartList
-                  if (size === false) {
-                    state.CartList[i].prices.push(cartItem.prices[0]);
-                  }
-                  // Sắp xếp sản phẩm
-                  state.CartList[i].prices.sort((a: any, b: any) => {
-                    if (a.size > b.size) {
-                      return -1;
-                    }
-                    if (a.size < b.size) {
-                      return 1;
-                    }
-                    return 0;
-                  });
-                  break;
                 }
+                if (size === false) {
+                  state.CartList[i].prices.push(cartItem.prices[0]);
+                }
+                state.CartList[i].prices.sort((a: any, b: any) => {
+                  if (a.size > b.size) {
+                    return -1;
+                  }
+                  if (a.size < b.size) {
+                    return 1;
+                  }
+                  return 0;
+                });
+                break;
               }
-              // Kiểm tra nếu sản phẩm không tồn tại
-              if (found === false) {
-                state.CartList.push(cartItem);
-              }
+            }
+            if (found === false) {
+              state.CartList.push(cartItem);
             }
           }),
         ),
@@ -63,7 +58,7 @@ export const useStore = create(
             let totalPrice = 0;
             for (let i = 0; i < state.CartList.length; i++) {
               let tempPrice = 0;
-              for (let j = 0; j < state.CartList[i].prices[j].length; j++) {
+              for (let j = 0; j < state.CartList[i].prices.length; j++) {
                 tempPrice =
                   tempPrice +
                   parseFloat(state.CartList[i].prices[j].price) *
