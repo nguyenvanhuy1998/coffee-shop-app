@@ -24,6 +24,11 @@ const App = () => {
           component={DetailsScreen}
           options={{animation: 'slide_from_bottom'}}
         />
+        <Stack.Screen
+          name="Payment"
+          component={PaymentScreen}
+          options={{animation: 'slide_from_bottom'}}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
