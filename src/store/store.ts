@@ -170,6 +170,41 @@ export const useStore = create(
             }
           }),
         ),
+      addToOrderHistoryListFormCart: () =>
+        set(
+          produce(state => {
+            // Tính tổng ItemPrice từ mảng CartList
+            let temp = state.CartList.reduce(
+              (accumulator: number, currentValue: any) =>
+                accumulator + parseFloat(currentValue.ItemPrice),
+              0,
+            );
+            // Kiểm tra độ dài danh sách lịch sử đặt hàng
+            if (state.OrderHistoryList.length > 0) {
+              // Thêm phần tử vào đầu mảng mảng vào danh sách lịch sử đặt hàng
+              state.OrderHistoryList.unshift({
+                OrderDate:
+                  new Date().toDateString() +
+                  ' ' +
+                  new Date().toLocaleTimeString(),
+                CartList: state.CartList,
+                CartListPrice: temp.toFixed(2).toString(),
+              });
+            } else {
+              // Thêm phần tử vào cuối mảng vào danh sách lịch sử đặt hàng
+              state.OrderHistoryList.push({
+                OrderDate:
+                  new Date().toDateString() +
+                  ' ' +
+                  new Date().toLocaleTimeString(),
+                CartList: state.CartList,
+                CartListPrice: temp.toFixed(2).toString(),
+              });
+            }
+            // Reset danh sách Cart
+            state.CartList = [];
+          }),
+        ),
     }),
 
     {
